@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet --version)"
+      "Bash(dotnet --version)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet sln add:*)",
+      "Bash(dotnet sln:*)",
+      "Bash(dotnet add:*)",
+      "Bash(dotnet build)",
+      "Bash(dotnet ef migrations add:*)"
     ],
     "deny": [],
     "ask": []

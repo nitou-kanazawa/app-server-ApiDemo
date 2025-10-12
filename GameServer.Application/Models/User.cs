@@ -1,4 +1,4 @@
-namespace GameServer.Models;
+namespace GameServer.Application.Models;
 
 public class User
 {
