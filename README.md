@@ -22,12 +22,21 @@ app-server-ApiDemo/
 │   ├── Program.cs                 # アプリ起動・サービス登録
 │   └── appsettings.json           # アプリ設定
 ├── GameServer.Application/    # アプリケーション層
-│   └── Models/
-│       ├── User.cs                # ユーザーモデル
-│       └── Score.cs               # スコアモデル
+│   ├── DTOs/                      # データ転送オブジェクト
+│   │   ├── AuthDtos.cs
+│   │   └── ScoreDtos.cs
+│   ├── Interfaces/                # サービスインターフェース
+│   │   ├── IAuthService.cs
+│   │   └── IScoreService.cs
+│   └── Models/                    # ドメインモデル
+│       ├── User.cs
+│       └── Score.cs
 └── GameServer.Infrastructure/ # インフラ層
     ├── Data/
     │   └── AppDbContext.cs        # EF Core DbContext
+    ├── Services/                  # サービス実装
+    │   ├── AuthService.cs
+    │   └── ScoreService.cs
     ├── Migrations/                # DBマイグレーション
     └── DependencyInjection.cs     # 依存注入設定
 ```
@@ -106,8 +115,14 @@ Content-Type: application/json
 ```
 
 #### ランキング取得
+日付フィルタリングに対応しています。
 ```
-GET /api/scores/ranking?limit=10
+GET /api/scores/ranking?limit=10&startDate=2025-10-01&endDate=2025-10-31
+
+Query Parameters:
+- limit (optional, default: 10, max: 100): 取得件数
+- startDate (optional): 開始日時 (ISO 8601形式)
+- endDate (optional): 終了日時 (ISO 8601形式)
 
 Response:
 [

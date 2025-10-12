@@ -1,4 +1,6 @@
+using GameServer.Application.Interfaces;
 using GameServer.Infrastructure.Data;
+using GameServer.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,10 @@ public static class DependencyInjection
                         $"Supported providers are: Sqlite, PostgreSQL");
             }
         });
+
+        // サービスの登録
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IScoreService, ScoreService>();
 
         return services;
     }
