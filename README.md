@@ -14,17 +14,22 @@ ASP.NET Core Web API で作る、学習用のゲームサーバーです。
 ## プロジェクト構成
 
 ```
-GameServer/
-├── Controllers/
-│   ├── AuthController.cs      # ユーザー登録・ログイン（JWT）
-│   └── ScoreController.cs     # スコア送信・ランキング取得
-├── Models/
-│   ├── AppDbContext.cs        # EF Core DbContext
-│   ├── User.cs                # ユーザーモデル
-│   └── Score.cs               # スコアモデル
-├── Migrations/                # DBマイグレーション
-├── Program.cs                 # アプリ起動・サービス登録
-└── appsettings.Development.json  # 開発環境設定（JWT鍵）
+app-server-ApiDemo/
+├── GameServer.API/            # プレゼンテーション層
+│   ├── Controllers/
+│   │   ├── AuthController.cs      # ユーザー登録・ログイン（JWT）
+│   │   └── ScoreController.cs     # スコア送信・ランキング取得
+│   ├── Program.cs                 # アプリ起動・サービス登録
+│   └── appsettings.json           # アプリ設定
+├── GameServer.Application/    # アプリケーション層
+│   └── Models/
+│       ├── User.cs                # ユーザーモデル
+│       └── Score.cs               # スコアモデル
+└── GameServer.Infrastructure/ # インフラ層
+    ├── Data/
+    │   └── AppDbContext.cs        # EF Core DbContext
+    ├── Migrations/                # DBマイグレーション
+    └── DependencyInjection.cs     # 依存注入設定
 ```
 
 ## セットアップ
@@ -43,14 +48,14 @@ dotnet tool install --global dotnet-ef
 
 ```bash
 # マイグレーションを適用してデータベースを作成
-dotnet ef database update --project GameServer
+dotnet ef database update --project GameServer.Infrastructure --startup-project GameServer.API
 ```
 
 ### 3. アプリケーションの起動
 
 ```bash
 # 開発サーバーを起動
-dotnet run --project GameServer
+dotnet run --project GameServer.API
 ```
 
 起動後、Swagger UI でAPIをテストできます：
@@ -62,7 +67,7 @@ dotnet run --project GameServer
 
 #### ユーザー登録
 ```
-POST /Auth/api/register
+POST /api/auth/register
 Content-Type: application/json
 
 {
@@ -73,7 +78,7 @@ Content-Type: application/json
 
 #### ログイン
 ```
-POST /Auth/api/login
+POST /api/auth/login
 Content-Type: application/json
 
 {
@@ -91,7 +96,7 @@ Response:
 
 #### スコア送信（JWT認証必須）
 ```
-POST /Score/api/submit
+POST /api/scores
 Authorization: Bearer <token>
 Content-Type: application/json
 
@@ -102,7 +107,7 @@ Content-Type: application/json
 
 #### ランキング取得
 ```
-GET /Score/api/ranking?limit=10
+GET /api/scores/ranking?limit=10
 
 Response:
 [
@@ -117,7 +122,7 @@ Response:
 
 #### 自分のベストスコア取得（JWT認証必須）
 ```
-GET /Score/api/mybest
+GET /api/scores/me/best
 Authorization: Bearer <token>
 
 Response:
@@ -130,27 +135,27 @@ Response:
 ## Swagger UI での使い方
 
 1. アプリを起動後、ブラウザで `https://localhost:<port>/swagger` を開く
-2. `/Auth/api/register` でユーザー登録
-3. `/Auth/api/login` でログインし、レスポンスからトークンをコピー
+2. `/api/auth/register` でユーザー登録
+3. `/api/auth/login` でログインし、レスポンスからトークンをコピー
 4. **右上の「Authorize」ボタン**をクリック
 5. トークンを入力（`Bearer` プレフィックスは不要）
 6. 「Authorize」をクリックして認証完了
-7. 認証が必要なエンドポイント（`/Score/api/submit`, `/Score/api/mybest`）にアクセス可能
+7. 認証が必要なエンドポイント（`/api/scores`, `/api/scores/me/best`）にアクセス可能
 
 ## 開発コマンド
 
 ```bash
 # プロジェクトのビルド
-dotnet build GameServer/GameServer.csproj
+dotnet build GameServer.API/GameServer.API.csproj
 
 # 新しいマイグレーションの作成
-dotnet ef migrations add <MigrationName> --project GameServer
+dotnet ef migrations add <MigrationName> --project GameServer.Infrastructure --startup-project GameServer.API
 
 # データベースの更新
-dotnet ef database update --project GameServer
+dotnet ef database update --project GameServer.Infrastructure --startup-project GameServer.API
 
 # データベースの削除
-dotnet ef database drop --project GameServer
+dotnet ef database drop --project GameServer.Infrastructure --startup-project GameServer.API
 ```
 
 ## 設定
