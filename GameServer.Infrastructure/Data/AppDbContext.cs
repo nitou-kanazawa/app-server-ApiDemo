@@ -1,6 +1,7 @@
+using GameServer.Application.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameServer.Models;
+namespace GameServer.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

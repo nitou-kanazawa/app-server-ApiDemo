@@ -1,12 +1,13 @@
-using GameServer.Models;
+using GameServer.Application.Models;
+using GameServer.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameServer.Controllers;
+namespace GameServer.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/scores")]
 public class ScoreController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
@@ -20,7 +21,7 @@ public class ScoreController : ControllerBase
     /// スコア送信（JWT認証必須）
     /// </summary>
     [Authorize]
-    [HttpPost("api/submit")]
+    [HttpPost]
     public async Task<IActionResult> SubmitScore([FromBody] SubmitScoreRequest request)
     {
         // JWTトークンからユーザーIDを取得
@@ -46,7 +47,7 @@ public class ScoreController : ControllerBase
     /// <summary>
     /// ランキング取得（トップN件）
     /// </summary>
-    [HttpGet("api/ranking")]
+    [HttpGet("ranking")]
     public async Task<IActionResult> GetRanking([FromQuery] int limit = 10)
     {
         if (limit <= 0 || limit > 100)
@@ -74,7 +75,7 @@ public class ScoreController : ControllerBase
     /// 自分のベストスコア取得（JWT認証必須）
     /// </summary>
     [Authorize]
-    [HttpGet("api/mybest")]
+    [HttpGet("me/best")]
     public async Task<IActionResult> GetMyBestScore()
     {
         // JWTトークンからユーザーIDを取得

@@ -19,4 +19,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameServer.Application\GameServer.Application.csproj" />
+    <ProjectReference Include="..\GameServer.Infrastructure\GameServer.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

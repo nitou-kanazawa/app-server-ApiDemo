@@ -1,14 +1,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using GameServer.Models;
+using GameServer.Application.Models;
+using GameServer.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GameServer.Controllers;
+namespace GameServer.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
@@ -21,7 +22,7 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost("api/register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         if (await _dbContext.Users.AnyAsync(u => u.Username == request.Username))
@@ -41,7 +42,7 @@ public class AuthController : ControllerBase
         return Ok(new { message = "User registered successfully" });
     }
 
-    [HttpPost("api/login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginResponse request)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == request.Username);

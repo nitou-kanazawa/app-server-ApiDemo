@@ -1,13 +1,12 @@
-using GameServer.Models;
-using Microsoft.EntityFrameworkCore;
+using GameServer.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Db設定
-builder.Services.AddDbContext<AppDbContext>(option => { option.UseSqlite("Data Source=game.db"); });
+// Infrastructure層の登録（DB設定含む）
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Controller + Swagger
 builder.Services.AddControllers();
