@@ -9,7 +9,9 @@
       "Bash(dotnet sln:*)",
       "Bash(dotnet add:*)",
       "Bash(dotnet build)",
-      "Bash(dotnet ef migrations add:*)"
+      "Bash(dotnet ef migrations add:*)",
+      "Bash(git branch:*)",
+      "Bash(dotnet run:*)"
     ],
     "deny": [],
     "ask": []
